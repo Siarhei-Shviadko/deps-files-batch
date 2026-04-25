@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: clean_group_table_before_adding_ok
+      author: Anton Navarka
+      changes:
+        - delete:
+            tableName: group
+            where: true
+  - changeSet:
+      id: add_document_type_foreign_key_to_group
+      author: Anton Navarka
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: group_document_types
+            baseColumnNames: document_type_id
+            referencedTableName: document_type
+            referencedColumnNames: id
+            constraintName: group_document_type_document_type_id_fk
+            deleteCascade: true
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableName: group_document_types
+            constraintName: group_document_type_document_type_id_fk

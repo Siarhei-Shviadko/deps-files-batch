@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-name-to-files
+      author: Raman Salauyou
+      changes:
+        - addColumn:
+            tableName: file
+            columns:
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+        - sql:
+            sql: UPDATE file SET name = substring(file_path from '[^/]+$');
+        - addNotNullConstraint:
+            tableName: file
+            columnName: name
+
+      rollback:
+        - dropColumn:
+            tableName: file
+            columnName: name

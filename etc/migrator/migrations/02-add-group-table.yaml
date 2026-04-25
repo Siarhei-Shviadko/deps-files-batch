@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Raman Salauyou
+      changes:
+        - createTable:
+            tableName: group
+            columns:
+              - column:
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: group_id
+                  name: group_id
+                  type: VARCHAR
+              - column:
+                  constraints:
+                    nullable: false
+                  name: tenant_id
+                  type: VARCHAR
+              - column:
+                  constraints:
+                    nullable: false
+                  name: is_deleted
+                  type: BOOLEAN
+
+      rollback:
+        - dropTable:
+            tableName: group
+
+  - changeSet:
+      id: 2
+      author: Raman Salauyou
+      changes:
+        - createTable:
+            tableName: group_document_types
+            columns:
+              - column:
+                  name: group_id
+                  type: VARCHAR
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: group_document_types_pk
+              - column:
+                  name: document_type_id
+                  type: VARCHAR
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: group_document_types_pk
+      rollback:
+        - dropTable:
+            tableName: group_document_types
+
+  - changeSet:
+      id: 3
+      author: Raman Salauyou
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: group_document_types
+            baseColumnNames: group_id
+            referencedTableName: group
+            referencedColumnNames: group_id
+            constraintName: group_id_fk
+            onDelete: CASCADE
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableName: group_document_types
+            constraintName: group_id_fk

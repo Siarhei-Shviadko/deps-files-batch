@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_file_table
+      author: Anton Navarka
+      changes:
+        - createTable:
+            tableName: file
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: batch_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_file_batch"
+                    references: "batch(id)"
+                    deleteCascade: true
+              - column:
+                  name: document_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: document_type_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: true
+                    foreignKeyName: "fk_file_document_type"
+                    references: "document_type(id)"
+                    onDelete: "SET NULL"
+              - column:
+                  name: file_path
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: error
+                  type: json
+                  constraints:
+                    nullable: true
+              - column:
+                  name: processing_parameters
+                  type: json
+                  defaultValueComputed: "'{}'::jsonb"
+                  constraints:
+                    nullable: false
+            indexes:
+              - index:
+                  name: idx_file_batch_id
+                  columns:
+                    - column:
+                        name: batch_id
+      rollback:
+        dropTable:
+          tableName: file

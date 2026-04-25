@@ -1,0 +1,16 @@
+version: "3.4"
+
+services:
+  api:
+    image: "files-batch-dev"
+    container_name: "deps-files-batch"
+    command: python -m deps_files_batch serve
+
+  consumer:
+    image: "files-batch-dev"
+    container_name: "deps-files-batch-consumer"
+    command: python -m deps_files_batch dispatch
+
+  migrator:
+    image: "files-batch-migrator"
+    container_name: "deps-files-batch-migrator"

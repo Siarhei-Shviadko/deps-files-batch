@@ -1,0 +1,33 @@
+files_batch:
+  image:
+    path: "/deps-presale-x01/deps-files-batch"
+  resources: {}
+
+files_batch_settings:
+  ENV: presale
+
+  LOG_LEVEL: "INFO"
+
+  DATABASE_REQUIRE_SECURE_TRANSPORT: false
+
+migration_settings:
+  DATABASE_REQUIRE_SECURE_TRANSPORT: false
+
+files_batch_consumer:
+  image:
+    path: "/deps-presale-x01/deps-files-batch"
+
+migrator:
+  image:
+    path: "/deps-presale-x01/deps-files-batch-migrator"
+
+helm:
+  helm_logs_job_enabled: false
+
+csi:
+  vault_namespace: 'k8s-presale'
+  roleName: 'k8s-presale'
+  vaultKubernetesMountPath: 'kubernetes-presale'
+
+service_account:
+  serviceAccountName: 'deps-presale'

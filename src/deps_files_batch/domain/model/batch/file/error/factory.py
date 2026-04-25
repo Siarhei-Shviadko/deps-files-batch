@@ -1,0 +1,63 @@
+from typing import TypeAlias
+
+from .constants import (  # noqa: WPS235
+    ABORTED_ERROR_CODE,
+    ABORTED_ERROR_MESSAGE,
+    DATA_EXTRACTION_ERROR_CODE,
+    DATA_EXTRACTION_ERROR_MESSAGE,
+    DEFAULT_ERROR_CODE,
+    DEFAULT_ERROR_MESSAGE,
+    EXPORTING_ERROR_CODE,
+    EXPORTING_ERROR_MESSAGE,
+    IDENTIFICATION_ERROR_CODE,
+    IDENTIFICATION_ERROR_MESSAGE,
+    IMAGE_PREPROCESSING_ERROR_CODE,
+    IMAGE_PREPROCESSING_ERROR_MESSAGE,
+    PARSING_ERROR_CODE,
+    PARSING_ERROR_MESSAGE,
+    POSTPROCESSING_ERROR_CODE,
+    POSTPROCESSING_ERROR_MESSAGE,
+    PREPROCESSING_ERROR_CODE,
+    PREPROCESSING_ERROR_MESSAGE,
+    UNIFICATION_ERROR_CODE,
+    UNIFICATION_ERROR_MESSAGE,
+    VALIDATION_ERROR_CODE,
+    VALIDATION_ERROR_MESSAGE,
+    VERSION_IDENTIFICATION_ERROR_CODE,
+    VERSION_IDENTIFICATION_ERROR_MESSAGE,
+)
+from .document_state import DocumentState
+from .error import Error
+
+__all__ = ["ErrorFactory"]
+
+ErrorCode: TypeAlias = str
+ErrorMessage: TypeAlias = str
+
+
+class ErrorFactory:
+    error_fields_by_document_state: dict[DocumentState | str | None, tuple[ErrorCode, ErrorMessage]] = {
+        DocumentState.PREPROCESSING: (PREPROCESSING_ERROR_CODE, PREPROCESSING_ERROR_MESSAGE),
+        DocumentState.IDENTIFICATION: (IDENTIFICATION_ERROR_CODE, IDENTIFICATION_ERROR_MESSAGE),
+        DocumentState.DATA_EXTRACTION: (DATA_EXTRACTION_ERROR_CODE, DATA_EXTRACTION_ERROR_MESSAGE),
+        DocumentState.VALIDATION: (VALIDATION_ERROR_CODE, VALIDATION_ERROR_MESSAGE),
+        DocumentState.UNIFICATION: (UNIFICATION_ERROR_CODE, UNIFICATION_ERROR_MESSAGE),
+        DocumentState.IMAGE_PREPROCESSING: (IMAGE_PREPROCESSING_ERROR_CODE, IMAGE_PREPROCESSING_ERROR_MESSAGE),
+        DocumentState.PARSING: (PARSING_ERROR_CODE, PARSING_ERROR_MESSAGE),
+        DocumentState.VERSION_IDENTIFICATION: (VERSION_IDENTIFICATION_ERROR_CODE, VERSION_IDENTIFICATION_ERROR_MESSAGE),
+        DocumentState.POSTPROCESSING: (POSTPROCESSING_ERROR_CODE, POSTPROCESSING_ERROR_MESSAGE),
+        DocumentState.EXPORTING: (EXPORTING_ERROR_CODE, EXPORTING_ERROR_MESSAGE),
+    }
+
+    @staticmethod
+    def create_aborted() -> Error:  # noqa: WPS605
+        return Error(code=ABORTED_ERROR_CODE, message=ABORTED_ERROR_MESSAGE)
+
+    @classmethod
+    def create_for_document_state(cls, document_state: DocumentState | str | None) -> Error:
+        return Error(
+            *cls.error_fields_by_document_state.get(
+                document_state,
+                (DEFAULT_ERROR_CODE, DEFAULT_ERROR_MESSAGE),
+            ),
+        )

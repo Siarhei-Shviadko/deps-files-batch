@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-name-to-groups
+      author: Anton Navarka
+      changes:
+        - delete:
+            tableName: group
+            where: true
+        - addColumn:
+            tableName: group
+            columns:
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+      rollback:
+        - dropColumn:
+            tableName: group
+            columnName: name

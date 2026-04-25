@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: files-batch
+  labels:
+    {{- include "deps-files-batch.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.files_batch.service.type }}
+  ports:
+    - port: {{ .Values.files_batch.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "deps-files-batch.selectorLabels" . | nindent 4 }}

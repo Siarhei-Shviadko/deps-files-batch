@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_document_type_table
+      author: Anton Navarka
+      changes:
+        - createTable:
+            tableName: document_type
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+      rollback:
+        - dropTable:
+            tableName: document_type
