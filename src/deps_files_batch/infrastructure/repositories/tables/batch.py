@@ -22,6 +22,7 @@ class BatchTable(Base):
     id: Mapped[str] = mapped_column(String(UUID_LENGTH), primary_key=True)
     tenant_id: Mapped[str] = mapped_column(String(UUID_LENGTH), nullable=False)
     group_id: Mapped[str] = mapped_column(ForeignKey("group.group_id", ondelete="SET NULL"), nullable=True, index=True)
+    source_file_id: Mapped[str] = mapped_column(String(UUID_LENGTH), nullable=True)
     name: Mapped[str] = mapped_column(String(NAME_LENGTH), nullable=False, index=True)
     status: Mapped[BatchStatus] = mapped_column(Enum(BatchStatus), nullable=False, default=BatchStatus.NEW)
     batch_metadata: Mapped[dict] = mapped_column(JSON, nullable=False)
@@ -43,6 +44,7 @@ class BatchTable(Base):
             id=batch.id(),
             tenant_id=batch.tenant_id(),
             group_id=(gid := batch.group_id) and gid(),
+            source_file_id=batch.source_file_id,
             name=batch.name,
             status=batch.status(),
             batch_metadata=batch.metadata,

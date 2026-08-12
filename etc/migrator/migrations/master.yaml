@@ -17,3 +17,5 @@ databaseChangeLog:
       file: ./migrations/08-add-name-to-groups.yaml
   - include:
       file: ./migrations/09-add-name-to-files.yaml
+  - include:
+      file: ./migrations/10-add-source-file-id-to-batch.yaml

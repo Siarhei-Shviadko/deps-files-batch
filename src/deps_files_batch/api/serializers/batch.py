@@ -13,6 +13,7 @@ from .configured_base_serializer import ConfiguredSerializer
 __all__ = [
     "FileRequestSerializer",
     "BatchRequestSerializer",
+    "BatchFromFileRequestSerializer",
     "BatchCreateResponse",
     "ProcessingParametersSerializer",
     "BatchUpdateRequest",
@@ -59,6 +60,10 @@ class BatchRequestSerializer(ConfiguredSerializer):
             raise ValueError("Group or all file document types should be provided")
 
         return values
+
+
+class BatchFromFileRequestSerializer(BatchRequestSerializer):
+    source_file_id: str = Field(..., alias="sourceFileId")
 
 
 class BatchCreateResponse(ConfiguredSerializer):

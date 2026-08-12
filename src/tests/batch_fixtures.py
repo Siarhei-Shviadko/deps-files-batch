@@ -46,6 +46,8 @@ __all__ = [
     "failed_batch",
     "batch_without_group",
     "save_batch_without_group",
+    "batch_with_source_file_id",
+    "save_batch_with_source_file_id",
 ]
 
 
@@ -275,3 +277,29 @@ def batch_without_group(batch_id, tenant_id, document_type_id) -> Batch:
 def save_batch_without_group(batch_without_group, fake_unit_of_work, fake_query_batch_repository):
     fake_unit_of_work.batches.save(batch_without_group)
     fake_query_batch_repository.save(batch_without_group)
+
+
+@pytest.fixture
+def batch_with_source_file_id(batch_name, tenant_id, group_id, file_creation_data, batch_metadata, faker) -> Batch:
+    batch = (
+        BatchBuilder.for_tenant(tenant_id())
+        .with_name(batch_name)
+        .with_group_id(group_id())
+        .with_metadata(batch_metadata)
+        .with_source_file_id(faker.uuid4())
+        .with_file()
+        .with_name(file_creation_data.name)
+        .with_path(file_creation_data.file_path)
+        .with_document_type_id(file_creation_data.document_type_id)
+        .with_processing_params(file_creation_data.processing_params)
+        .build()
+    )
+    batch.events.clear()
+
+    return batch
+
+
+@pytest.fixture
+def save_batch_with_source_file_id(batch_with_source_file_id, fake_unit_of_work, fake_query_batch_repository) -> None:
+    fake_unit_of_work.batches.save(batch_with_source_file_id)
+    fake_query_batch_repository.save(batch_with_source_file_id)

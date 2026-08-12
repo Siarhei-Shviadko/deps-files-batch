@@ -3,6 +3,7 @@ from sqlalchemy import text
 
 from deps_files_batch.domain.model import (
     Batch,
+    BatchBuilder,
     BatchId,
     File,
     Group,
@@ -92,6 +93,31 @@ def test_get_several_batches__not_found_empty_list(
         ids={faker.uuid4() for _ in range(5)}, tenant_id=tenant_id()
     )
     assert found_batches == []
+
+
+@pytest.mark.batch_command_repository
+def test_save_batch__with_source_file_id__source_file_id_preserved(
+    batch_command_repository: ICommandBatchRepository,
+    tenant_id: TenantId,
+    file_creation_data,
+    faker,
+):
+    source_file_id = faker.uuid4()
+    batch = (
+        BatchBuilder.for_tenant(tenant_id())
+        .with_name(faker.word())
+        .with_source_file_id(source_file_id)
+        .with_file()
+        .with_name(file_creation_data.name)
+        .with_path(file_creation_data.file_path)
+        .with_processing_params(file_creation_data.processing_params)
+        .build()
+    )
+    batch_command_repository.save(batch)
+
+    saved_batch = batch_command_repository.batch_of_id(batch_id=batch.id(), tenant_id=tenant_id())
+
+    assert saved_batch.source_file_id == source_file_id
 
 
 @pytest.mark.usefixtures("save_group", "save_batches")

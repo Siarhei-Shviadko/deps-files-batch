@@ -57,6 +57,7 @@ class BatchService:  # noqa: WPS214
         file_params: list[FileCreationData],
         tenant_id: str,
         batch_metadata: dict[str, Any] | None = None,
+        source_file_id: str | None = None,
     ) -> Batch:
         with self._uow:
             if group_id:
@@ -68,6 +69,7 @@ class BatchService:  # noqa: WPS214
                 file_params=file_params,
                 group_id=group_id,
                 tenant_id=tenant_id,
+                source_file_id=source_file_id,
             )
             self._save_batch(batch)
 

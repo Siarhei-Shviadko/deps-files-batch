@@ -15,6 +15,7 @@ class BatchBuilder:
         self._name: str | None = None
         self._group_id: str | None = None
         self._metadata: dict[str, Any] | None = None
+        self._source_file_id: str | None = None
         self._files: list["File"] = []
 
     @classmethod
@@ -36,6 +37,10 @@ class BatchBuilder:
         self._metadata = metadata
         return self
 
+    def with_source_file_id(self, source_file_id: str | None) -> Self:
+        self._source_file_id = source_file_id
+        return self
+
     def build(self) -> Batch:
         batch_id = EntityId().value
         return Batch(
@@ -44,6 +49,7 @@ class BatchBuilder:
             name=self._name,
             metadata=self._metadata,
             group_id=self._group_id,
+            source_file_id=self._source_file_id,
             files=self._files,
             events=[
                 BatchCreated(

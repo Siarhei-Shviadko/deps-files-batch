@@ -3,9 +3,11 @@ from pytest import lazy_fixture as lazy
 
 from deps_files_batch.domain.model import (
     Batch,
+    BatchBuilder,
     BatchFiltering,
     BatchId,
     BatchSorting,
+    ICommandBatchRepository,
     IQueryBatchRepository,
     Pagination,
     TenantId,
@@ -34,6 +36,32 @@ def test_find_batch__has_batch__valid_response(
 ):
     batch_info = query_batch_repository.find_batch(batch_id=batch_id(), tenant_id=tenant_id())
     compare_batch_and_batch_info(batch=batch, batch_info=batch_info, group_name=group_name)
+
+
+@pytest.mark.batch_query_repository
+def test_find_batch__with_source_file_id__source_file_id_in_response(
+    batch_command_repository: ICommandBatchRepository,
+    query_batch_repository: IQueryBatchRepository,
+    tenant_id: TenantId,
+    file_creation_data,
+    faker,
+):
+    source_file_id = faker.uuid4()
+    batch = (
+        BatchBuilder.for_tenant(tenant_id())
+        .with_name(faker.word())
+        .with_source_file_id(source_file_id)
+        .with_file()
+        .with_name(file_creation_data.name)
+        .with_path(file_creation_data.file_path)
+        .with_processing_params(file_creation_data.processing_params)
+        .build()
+    )
+    batch_command_repository.save(batch)
+
+    batch_info = query_batch_repository.find_batch(batch_id=batch.id(), tenant_id=tenant_id())
+
+    assert batch_info["source_file_id"] == source_file_id
 
 
 @pytest.mark.batch_query_repository

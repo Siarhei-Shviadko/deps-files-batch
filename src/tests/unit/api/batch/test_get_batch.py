@@ -29,3 +29,11 @@ def test_get_batch__not_found(client, batch_id):
     response = client.get(f"{V1_API_PREFIX}/batches/{batch_id()}")
 
     assert response.status_code == 404
+
+
+@pytest.mark.usefixtures("save_batch_with_source_file_id")
+def test_get_batch__with_source_file_id__source_file_id_in_response(client, batch_with_source_file_id):
+    response = client.get(f"{V1_API_PREFIX}/batches/{batch_with_source_file_id.id()}")
+
+    assert response.status_code == 200
+    assert response.json()["sourceFileId"] == batch_with_source_file_id.source_file_id

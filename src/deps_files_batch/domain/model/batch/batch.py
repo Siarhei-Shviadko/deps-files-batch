@@ -39,6 +39,7 @@ class Batch:
     metadata = Guard[dict[str, Any]](dict, ImmutableCheck())
     created_at = Guard[datetime](datetime, ImmutableCheck())
     updated_at = Guard[datetime](datetime)
+    source_file_id = Guard[str](str, ImmutableCheck())
     file_storage = Guard[LimitedFilesDict](
         LimitedFilesDict,
         ImmutableCheck(),
@@ -56,6 +57,7 @@ class Batch:
         created_at: datetime | None = None,
         updated_at: datetime | None = None,
         group_id: str | None = None,
+        source_file_id: str | None = None,
         *,
         events: list[Event] | None = None,
         commands: list[Command] | None = None,
@@ -77,6 +79,8 @@ class Batch:
             self.updated_at = updated_at
         if group_id:
             self.group_id = GroupId(group_id)
+        if source_file_id:
+            self.source_file_id = source_file_id
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and other.id == self.id
@@ -94,6 +98,7 @@ class Batch:
                 f"created_at={self.created_at!r},",
                 f"updated_at={self.updated_at!r},",
                 f"group_id={self.group_id},",
+                f"source_file_id={self.source_file_id},",
                 f"events={self.events},",
                 f"commands={self.commands})",
             ),
