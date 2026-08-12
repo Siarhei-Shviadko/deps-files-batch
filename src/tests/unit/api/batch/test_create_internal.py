@@ -1,6 +1,8 @@
+from uuid import uuid4
+
 import pytest
 
-from deps_files_batch.api import BatchRequestSerializer
+from deps_files_batch.api import BatchFromFileRequestSerializer
 from deps_files_batch.constants import INTERNAL_API_PREFIX
 
 
@@ -19,11 +21,12 @@ def test_internal_create_batch_from_file__batch_created(
             processingParams=file_creation_data.processing_params,
         )
     ]
-    payload = BatchRequestSerializer(
+    payload = BatchFromFileRequestSerializer(
         name=batch_name,
         group_id=group_id(),
         metadata={},
         files=file_params,
+        source_file_id=uuid4().hex,
     ).json(by_alias=True)
 
     response = client.post(f"{INTERNAL_API_PREFIX}/batches/from-file", data=payload)

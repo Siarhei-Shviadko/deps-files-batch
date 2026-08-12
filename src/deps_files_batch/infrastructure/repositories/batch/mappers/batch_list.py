@@ -12,11 +12,9 @@ from deps_files_batch.domain.model import (
     PaginatedResultMetadataInfo,
 )
 
-from .batch_info import BatchInfoMapper
+from ...tables import BatchTable, FileTable
 
 __all__ = ["BatchListMapper"]
-
-from ...tables import BatchTable, FileTable
 
 BatchTableMapping = dict[str, BatchTable]
 BatchFilesMapping = defaultdict[str, list[Row]]
@@ -75,6 +73,7 @@ class ListBatchUnitMapper:
             status=batch_data.status,
             created_at=batch_data.created_at,
             files=files,
+            source_file_id=batch_data.source_file_id,
         )
 
 

@@ -31,3 +31,4 @@ class BatchInfo(TypedDict):
     created_at: datetime
     files: list[FileInfo]
     metadata: dict
+    source_file_id: str | None

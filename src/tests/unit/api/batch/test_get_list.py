@@ -35,3 +35,12 @@ def test_find_batches(tenant_id, batch_name, batches, set_user, client):
         assert batch["id"] == expected_batch.id()
 
     assert json_response["meta"]["total"] == len(expected_batches_without_pagination)
+
+
+@pytest.mark.usefixtures("save_batch_with_source_file_id")
+def test_find_batches__with_source_file_id__source_file_id_in_response(client, batch_with_source_file_id):
+    response = client.get(f"{V1_API_PREFIX}/batches")
+
+    assert response.status_code == HTTPStatus.OK
+    [batch] = response.json()["result"]
+    assert batch["sourceFileId"] == batch_with_source_file_id.source_file_id

@@ -80,4 +80,5 @@ class BatchInfoMapper:
             created_at=batch_data.created_at,
             files=files,
             metadata=batch_data.batch_metadata,
+            source_file_id=batch_data.source_file_id,
         )

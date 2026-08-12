@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-source-file-id-to-batch
+      author: Raman Salauyou
+      changes:
+        - addColumn:
+            tableName: batch
+            columns:
+              - column:
+                  name: source_file_id
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: true
+      rollback:
+        - dropColumn:
+            tableName: batch
+            columnName: source_file_id

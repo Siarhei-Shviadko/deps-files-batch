@@ -54,4 +54,5 @@ class BatchInfoMapper:
             created_at=batch.created_at,
             files=[*map(cls.FileInfoMapper.from_model, batch.files)],
             metadata=batch.metadata,
+            source_file_id=batch.source_file_id,
         )

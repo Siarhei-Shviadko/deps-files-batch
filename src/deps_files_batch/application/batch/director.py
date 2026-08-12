@@ -9,9 +9,14 @@ def build_batch_with_file_params(
     group_id: str,
     tenant_id: str,
     batch_metadata: dict[str, Any] | None = None,
+    source_file_id: str | None = None,
 ) -> Batch:
     batch_builder = (
-        BatchBuilder.for_tenant(tenant_id).with_name(batch_name).with_group_id(group_id).with_metadata(batch_metadata)
+        BatchBuilder.for_tenant(tenant_id)
+        .with_name(batch_name)
+        .with_group_id(group_id)
+        .with_metadata(batch_metadata)
+        .with_source_file_id(source_file_id)
     )
     for file in file_params:
         batch_builder = (

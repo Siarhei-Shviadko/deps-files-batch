@@ -35,3 +35,4 @@ class SerializedBatchInfo(ConfiguredSerializer):
     created_at: datetime = Field(..., alias="createdAt")
     files: list[SerializedFileInfo]
     metadata: dict[str, Any]
+    source_file_id: str | None = Field(default=None, alias="sourceFileId")

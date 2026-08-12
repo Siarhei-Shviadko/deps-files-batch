@@ -40,6 +40,7 @@ class ListBatchInfoMapper:
                 created_at=batch.created_at,
                 group=result_mapper.ListBatchGroupInfoMapper.from_model(batch=batch, group_name=group_name),
                 files=[*map(result_mapper.ListBatchFileInfoMapper.from_model, batch.files)],
+                source_file_id=batch.source_file_id,
             )
 
     @classmethod

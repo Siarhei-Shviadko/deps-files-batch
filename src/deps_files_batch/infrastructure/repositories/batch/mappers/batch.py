@@ -62,4 +62,5 @@ class BatchMapper:
             created_at=batch_data.created_at,
             updated_at=batch_data.updated_at,
             group_id=batch_data.group_id,
+            source_file_id=batch_data.source_file_id,
         )

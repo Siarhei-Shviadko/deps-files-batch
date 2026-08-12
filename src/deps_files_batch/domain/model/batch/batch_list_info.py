@@ -2,8 +2,6 @@ from datetime import datetime
 from typing import TypedDict
 
 from ..shared import ErrorInfo, PaginatedResultMetadataInfo
-from .batch import Batch
-from .file import File
 
 __all__ = ["ListBatchUnit", "ListBatchFileInfo", "ListBatchInfo", "ListBatchGroupInfo"]
 
@@ -26,6 +24,7 @@ class ListBatchUnit(TypedDict):
     status: str
     created_at: datetime
     files: list[ListBatchFileInfo]
+    source_file_id: str | None
 
 
 class ListBatchInfo(TypedDict):

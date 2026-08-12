@@ -28,6 +28,7 @@ class SerializedListBatchInfo(ConfiguredSerializer):
     status: str
     files: list[SerializedListBatchFileInfo]
     created_at: datetime = Field(..., alias="createdAt")
+    source_file_id: str | None = Field(default=None, alias="sourceFileId")
 
 
 class GetBatchesResponse(ConfiguredSerializer):

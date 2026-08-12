@@ -7,7 +7,7 @@ from deps_files_batch.application import BatchService
 from deps_files_batch.containers import Containers
 
 from ..auth import get_current_user_tenant
-from ..serializers import BatchCreateFromFileResponse, BatchRequestSerializer
+from ..serializers import BatchCreateFromFileResponse, BatchFromFileRequestSerializer
 
 __all__ = ["internal_router"]
 
@@ -21,7 +21,7 @@ internal_router = APIRouter(prefix="/batches")
 )
 @inject
 def create_batch_from_file(
-    create_batch_request: BatchRequestSerializer,
+    create_batch_request: BatchFromFileRequestSerializer,
     current_tenant: str = Depends(get_current_user_tenant),
     batch_service: BatchService = Depends(Provide[Containers.batch_service]),
 ) -> BatchCreateFromFileResponse:
@@ -31,5 +31,6 @@ def create_batch_from_file(
         group_id=create_batch_request.group_id,
         batch_metadata=create_batch_request.metadata,
         file_params=create_batch_request.file_parameters,
+        source_file_id=create_batch_request.source_file_id,
     )
     return BatchCreateFromFileResponse(batch_id=batch.id(), batch_name=batch.name)
